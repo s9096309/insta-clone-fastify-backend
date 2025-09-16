@@ -7,9 +7,13 @@ const postsRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
 
   fastify.post<{ Body: CreatePostDto }>("/posts", async (request, reply) => {
     const newPost = await service.create(request.body);
-
-    // Return a 201 Created status code with the new post object
     return reply.code(201).send(newPost);
+  });
+
+  // New route to get all posts
+  fastify.get("/posts", async (request, reply) => {
+    const posts = await service.getAll();
+    return posts; // Fastify automatically sends a 200 OK for successful GET requests
   });
 };
 
