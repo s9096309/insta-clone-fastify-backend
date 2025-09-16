@@ -1,33 +1,45 @@
-import type { Database } from "better-sqlite3";
-import { CreatePostDto } from "src/modules/posts/posts.types";
+import type Database from "better-sqlite3";
+import type { CreatePostDto, Post } from "../modules/posts/posts.types";
+// New import for Reel types
+import { ReelForGrid } from "../modules/reels/reels.types";
 
-// This factory function creates and returns our transaction helpers.
-const createTransactionHelpers = (db: Database) => {
-  // We use prepared statements for security and performance.
+export type TransactionHelpers = ReturnType<typeof createTransactionHelpers>;
+
+const createTransactionHelpers = (db: Database.Database) => {
   const statements = {
     getPostById: db.prepare("SELECT * FROM posts WHERE id = ?"),
     getAllPosts: db.prepare("SELECT * FROM posts"),
     createPost: db.prepare(
-      "INSERT INTO posts (img_url, caption) VALUES (@img_url, @caption) RETURNING *",
+      "INSERT INTO posts (img_url, caption) VALUES (?, ?)"
     ),
+    // New prepared statement for getting reels
+    getReelsForGrid: db.prepare("SELECT id, video_url, caption FROM reels"),
   };
 
   const posts = {
     getById: (id: number) => {
-      return statements.getPostById.get(id);
+      return statements.getPostById.get(id) as Post;
     },
     getAll: () => {
-      return statements.getAllPosts.all();
+      return statements.getAllPosts.all() as Post[];
     },
     create: (data: CreatePostDto) => {
-      return statements.createPost.get(data);
+      const result = statements.createPost.run(data.img_url, data.caption);
+      return statements.getPostById.get(result.lastInsertRowid) as Post;
+    },
+  };
+
+  // New reels transaction object
+  const reels = {
+    getForGrid: () => {
+      return statements.getReelsForGrid.all() as ReelForGrid[];
     },
   };
 
   return {
     posts,
+    reels, // Add reels to the returned object
   };
 };
 
-export type TransactionHelpers = ReturnType<typeof createTransactionHelpers>;
 export { createTransactionHelpers };

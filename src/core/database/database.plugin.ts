@@ -17,15 +17,21 @@ async function databasePluginHelper(fastify: FastifyInstance) {
   const db = new Database("./database.db");
   fastify.log.info("SQLite database connection established.");
 
-  // Create a simple table for testing if it doesn't exist
   db.exec(`
-  CREATE TABLE IF NOT EXISTS posts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    img_url TEXT NOT NULL,
-    caption TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
-`);
+    CREATE TABLE IF NOT EXISTS posts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      img_url TEXT NOT NULL,
+      caption TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    -- Add the new table for reels below --
+    CREATE TABLE IF NOT EXISTS reels (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      video_url TEXT NOT NULL,
+      caption TEXT
+    );
+  `);
 
   const transactions = createTransactionHelpers(db);
 

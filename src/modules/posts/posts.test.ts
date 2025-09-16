@@ -20,7 +20,11 @@ describe("Posts Routes", () => {
       posts: {
         create: jest.fn().mockResolvedValue(createdPost),
         getAll: jest.fn(),
-        getById: jest.fn(), // <-- Add this line
+        getById: jest.fn(),
+      },
+      // Add the reels mock to match the real object's shape
+      reels: {
+        getForGrid: jest.fn(),
       },
     });
 
@@ -44,7 +48,11 @@ describe("Posts Routes", () => {
       posts: {
         getAll: jest.fn().mockResolvedValue(mockPosts),
         create: jest.fn(),
-        getById: jest.fn(), // <-- And add this line here
+        getById: jest.fn(),
+      },
+      // Add the reels mock here as well
+      reels: {
+        getForGrid: jest.fn(),
       },
     });
   
