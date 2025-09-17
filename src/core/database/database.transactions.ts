@@ -1,7 +1,8 @@
 import type Database from "better-sqlite3";
-import type { CreatePostDto, Post } from "../modules/posts/posts.types";
-// New import for Reel types
-import { ReelForGrid } from "../modules/reels/reels.types";
+import type { CreatePostDto, Post } from "../../modules/posts/posts.types";
+import { Reel } from "../../modules/reels/reels.types";
+import { TaggedPost } from "../../modules/tagged/tagged.types";
+import { Highlight } from "../../modules/highlights/highlights.types"; // <-- Corrected path for consistency
 
 export type TransactionHelpers = ReturnType<typeof createTransactionHelpers>;
 
@@ -12,8 +13,15 @@ const createTransactionHelpers = (db: Database.Database) => {
     createPost: db.prepare(
       "INSERT INTO posts (img_url, caption) VALUES (?, ?)"
     ),
-    // New prepared statement for getting reels
     getReelsForGrid: db.prepare("SELECT id, video_url, caption FROM reels"),
+    getTaggedPostsForGrid: db.prepare(`
+      SELECT p.id, p.img_url, p.caption, tp.user_who_tagged
+      FROM posts p
+      JOIN tagged_posts tp ON p.id = tp.post_id
+    `),
+    // --- Add new statements for highlights below ---
+    getAllHighlights: db.prepare("SELECT * FROM highlights"),
+    getHighlightById: db.prepare("SELECT * FROM highlights WHERE id = ?"),
   };
 
   const posts = {
@@ -29,16 +37,34 @@ const createTransactionHelpers = (db: Database.Database) => {
     },
   };
 
-  // New reels transaction object
   const reels = {
     getForGrid: () => {
-      return statements.getReelsForGrid.all() as ReelForGrid[];
+      return statements.getReelsForGrid.all() as Reel[];
+    },
+  };
+
+  const tagged = {
+    getForGrid: () => {
+      return statements.getTaggedPostsForGrid.all() as TaggedPost[];
+    },
+  };
+
+  
+
+  const highlights = {
+    getAll: () => {
+      return statements.getAllHighlights.all() as Highlight[];
+    },
+    getById: (id: number) => {
+      return statements.getHighlightById.get(id) as Highlight;
     },
   };
 
   return {
     posts,
-    reels, // Add reels to the returned object
+    reels,
+    tagged,
+    highlights,
   };
 };
 

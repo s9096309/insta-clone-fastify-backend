@@ -1,5 +1,4 @@
 import Fastify, { FastifyInstance } from "fastify";
-// This import will fail initially, which is part of the TDD process
 import { reelsRoutes } from "./reels.routes";
 
 describe("Reels Routes", () => {
@@ -16,17 +15,22 @@ describe("Reels Routes", () => {
       { id: 2, video_url: "url2", caption: "Second reel" },
     ];
     
-    // Mock the transaction layer for reels
     app.decorate("transactions", {
-      reels: {
-        getForGrid: jest.fn().mockResolvedValue(mockReels),
-      },
-      // We also need to mock the posts object to avoid type errors
-      posts: {
-        create: jest.fn(),
-        getAll: jest.fn(),
-        getById: jest.fn(),
-      }
+        posts: {
+          create: jest.fn(),
+          getAll: jest.fn(),
+          getById: jest.fn(),
+        },
+        reels: {
+          getForGrid: jest.fn().mockResolvedValue(mockReels),
+        },
+        tagged: {
+          getForGrid: jest.fn(),
+        },
+        highlights: {
+            getAll: jest.fn(),
+            getById: jest.fn(),
+          },
     });
   
     const response = await app.inject({

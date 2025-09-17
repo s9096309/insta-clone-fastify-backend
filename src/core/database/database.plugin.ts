@@ -31,6 +31,21 @@ async function databasePluginHelper(fastify: FastifyInstance) {
       video_url TEXT NOT NULL,
       caption TEXT
     );
+
+    -- Add the new table for tagged posts below --
+    CREATE TABLE IF NOT EXISTS tagged_posts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      post_id INTEGER,
+      user_who_tagged TEXT NOT NULL,
+      FOREIGN KEY (post_id) REFERENCES posts(id)
+    );
+
+    -- Add the new highlights table ---
+        CREATE TABLE IF NOT EXISTS highlights (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      cover_image_url TEXT NOT NULL,
+      title TEXT
+    );
   `);
 
   const transactions = createTransactionHelpers(db);

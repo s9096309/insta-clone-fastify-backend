@@ -22,9 +22,15 @@ describe("Posts Routes", () => {
         getAll: jest.fn(),
         getById: jest.fn(),
       },
-      // Add the reels mock to match the real object's shape
       reels: {
         getForGrid: jest.fn(),
+      },
+      tagged: {
+        getForGrid: jest.fn(),
+      },
+      highlights: {
+        getAll: jest.fn(),
+        getById: jest.fn(),
       },
     });
 
@@ -50,9 +56,16 @@ describe("Posts Routes", () => {
         create: jest.fn(),
         getById: jest.fn(),
       },
-      // Add the reels mock here as well
       reels: {
         getForGrid: jest.fn(),
+      },
+      tagged: { 
+        getForGrid: jest.fn() 
+      },
+      // FIX: Add the missing highlights mock here
+      highlights: {
+        getAll: jest.fn(),
+        getById: jest.fn(),
       },
     });
   
