@@ -6,13 +6,11 @@
   "directories": {
     "test": "test"
   },
-  
-
-"scripts": {
-  "build": "tsc",
-  "start": "node build/server.js",
-  "dev": "tsx watch src/server.ts"
-},
+  "scripts": {
+    "build": "tsc",
+    "start": "node -r tsconfig-paths/register build/server.js",
+    "dev": "tsx watch src/server.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -27,6 +25,7 @@
     "fastify-cli": "^7.4.0",
     "fastify-plugin": "^5.0.0",
     "sqlite": "^5.1.1",
+    "tsconfig-paths": "^4.2.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
