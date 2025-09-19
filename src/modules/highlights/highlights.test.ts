@@ -22,8 +22,8 @@ describe("Highlights Routes", () => {
         getById: jest.fn(),
       },
       posts: { create: jest.fn(), getAll: jest.fn(), getById: jest.fn() },
-      reels: { getForGrid: jest.fn() },
-      tagged: { getForGrid: jest.fn() },
+      reels: { getAll: jest.fn() },
+      tagged: { getAll: jest.fn() },
     });
   
     const response = await app.inject({
@@ -46,8 +46,8 @@ describe("Highlights Routes", () => {
         getById: jest.fn().mockResolvedValue(mockHighlight),
       },
       posts: { create: jest.fn(), getAll: jest.fn(), getById: jest.fn() },
-      reels: { getForGrid: jest.fn() },
-      tagged: { getForGrid: jest.fn() },
+      reels: { getAll: jest.fn() },
+      tagged: { getAll: jest.fn() },
     });
   
     const response = await app.inject({

@@ -5,7 +5,7 @@ const reelsRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   const service = reelsService(fastify);
 
   fastify.get("/reels/grid", async (request, reply) => {
-    const reels = await service.getForGrid();
+    const reels = await service.getAll();
     return reels;
   });
 };

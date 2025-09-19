@@ -22,10 +22,10 @@ describe("Tagged Routes", () => {
         getById: jest.fn(),
       },
       reels: {
-        getForGrid: jest.fn(),
+        getAll: jest.fn(),
       },
       tagged: {
-        getForGrid: jest.fn().mockResolvedValue(mockTaggedPosts),
+        getAll: jest.fn().mockResolvedValue(mockTaggedPosts),
       },
       highlights: {
         getAll: jest.fn(),

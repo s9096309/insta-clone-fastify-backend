@@ -2,62 +2,57 @@ import type Database from "better-sqlite3";
 import type { CreatePostDto, Post } from "../../modules/posts/posts.types";
 import { Reel } from "../../modules/reels/reels.types";
 import { TaggedPost } from "../../modules/tagged/tagged.types";
-import { Highlight } from "../../modules/highlights/highlights.types"; // <-- Corrected path for consistency
+import { Highlight } from "../../modules/highlights/highlights.types";
 
 export type TransactionHelpers = ReturnType<typeof createTransactionHelpers>;
 
 const createTransactionHelpers = (db: Database.Database) => {
-  const statements = {
-    getPostById: db.prepare("SELECT * FROM posts WHERE id = ?"),
-    getAllPosts: db.prepare("SELECT * FROM posts"),
-    createPost: db.prepare(
+  // --- POSTS ---
+  // Reverting to the original, stable implementation for 'create'
+  const postsStatements = {
+    getById: db.prepare("SELECT * FROM posts WHERE id = ?"),
+    getAll: db.prepare("SELECT * FROM posts"),
+    create: db.prepare(
       "INSERT INTO posts (img_url, caption) VALUES (?, ?)"
     ),
-    getReelsForGrid: db.prepare("SELECT id, video_url, caption FROM reels"),
-    getTaggedPostsForGrid: db.prepare(`
+  };
+  const posts = {
+    getById: (id: number) => postsStatements.getById.get(id) as Post,
+    getAll: () => postsStatements.getAll.all() as Post[],
+    create: (data: CreatePostDto) => {
+      const result = postsStatements.create.run(data.img_url, data.caption);
+      return postsStatements.getById.get(result.lastInsertRowid) as Post;
+    },
+  };
+
+  // --- REELS ---
+  const reelsStatements = {
+    getAll: db.prepare("SELECT id, video_url, thumbnail_url, caption, views FROM reels"),
+  };
+  const reels = {
+    getAll: () => reelsStatements.getAll.all() as Reel[],
+  };
+
+  // --- TAGGED ---
+  const taggedStatements = {
+    getAll: db.prepare(`
       SELECT p.id, p.img_url, p.caption, tp.user_who_tagged
       FROM posts p
       JOIN tagged_posts tp ON p.id = tp.post_id
     `),
-    // --- Add new statements for highlights below ---
-    getAllHighlights: db.prepare("SELECT * FROM highlights"),
-    getHighlightById: db.prepare("SELECT * FROM highlights WHERE id = ?"),
   };
-
-  const posts = {
-    getById: (id: number) => {
-      return statements.getPostById.get(id) as Post;
-    },
-    getAll: () => {
-      return statements.getAllPosts.all() as Post[];
-    },
-    create: (data: CreatePostDto) => {
-      const result = statements.createPost.run(data.img_url, data.caption);
-      return statements.getPostById.get(result.lastInsertRowid) as Post;
-    },
-  };
-
-  const reels = {
-    getForGrid: () => {
-      return statements.getReelsForGrid.all() as Reel[];
-    },
-  };
-
   const tagged = {
-    getForGrid: () => {
-      return statements.getTaggedPostsForGrid.all() as TaggedPost[];
-    },
+    getAll: () => taggedStatements.getAll.all() as TaggedPost[],
   };
 
-  
-
+  // --- HIGHLIGHTS ---
+  const highlightsStatements = {
+    getAll: db.prepare("SELECT * FROM highlights"),
+    getById: db.prepare("SELECT * FROM highlights WHERE id = ?"),
+  };
   const highlights = {
-    getAll: () => {
-      return statements.getAllHighlights.all() as Highlight[];
-    },
-    getById: (id: number) => {
-      return statements.getHighlightById.get(id) as Highlight;
-    },
+    getAll: () => highlightsStatements.getAll.all() as Highlight[],
+    getById: (id: number) => highlightsStatements.getById.get(id) as Highlight,
   };
 
   return {

@@ -5,7 +5,8 @@ const taggedRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   const service = taggedService(fastify);
 
   fastify.get("/tagged/grid", async (request, reply) => {
-    const tagged = await service.getForGrid();
+    // Update the method call here
+    const tagged = await service.getAll();
     return tagged;
   });
 };
