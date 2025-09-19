@@ -7,10 +7,10 @@
     "test": "test"
   },
   "scripts": {
-    "build": "tsc",
-    "start": "node -r tsconfig-paths/register build/server.js",
-    "dev": "tsx watch src/server.ts"
-  },
+  "build": "tsc",
+  "start": "node build/server.js",
+  "dev": "tsx watch src/server.ts"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
