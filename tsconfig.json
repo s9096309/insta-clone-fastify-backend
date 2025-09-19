@@ -9,13 +9,13 @@
       "rootDir": "./src",
       "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
-      "baseUrl": "./",
+      "baseUrl": "./build",
       "strict": true,
       "noImplicitAny": true,
       "strictNullChecks": true,
       "paths": {
-        "src/*": ["src/*"]
-      },
+        "src/*": ["./*"]
+    },
       "skipLibCheck": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true
