@@ -1,6 +1,6 @@
 import Fastify from "fastify";
 import multipart from "@fastify/multipart";
-import fastifyStatic from "@fastify/static"; // <-- New import
+import fastifyStatic from "@fastify/static";
 import path from "path";
 import { databasePlugin } from "./core/database/database.plugin";
 import { postsRoutes } from "./modules/posts/posts.routes";
@@ -30,7 +30,10 @@ async function main() {
   fastify.register(highlightsRoutes);
 
   try {
-    await fastify.listen({ port: 3000 });
+    await fastify.listen({
+      port: Number(process.env.PORT) || 3000,
+      host: '0.0.0.0'
+    });
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
