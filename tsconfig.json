@@ -9,12 +9,12 @@
       "rootDir": "./src",
       "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
-      "baseUrl": "./build",
+      "baseUrl": "./",
       "strict": true,
       "noImplicitAny": true,
       "strictNullChecks": true,
       "paths": {
-        "src/*": ["./*"]
+        "src/*": ["./src/*"]
     },
       "skipLibCheck": true,
       "experimentalDecorators": true,
