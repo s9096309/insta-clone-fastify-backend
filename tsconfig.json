@@ -6,6 +6,7 @@
       "lib": ["ESNext"],
       "allowJs": true,
       "outDir": "./build",
+      "rootDir": "./src",
       "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
       "baseUrl": "./",
