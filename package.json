@@ -6,15 +6,13 @@
   "directories": {
     "test": "test"
   },
-  "scripts": {
-    "build": "tsc",
-    "prestart": "npm run build",
-    "start": "node build/server.js",
-    "dev": "tsx watch src/server.ts",
-    "poststart": "rimraf build",
-    "lint": "eslint .",
-    "test": "jest"
-  },
+  
+
+"scripts": {
+  "build": "tsc",
+  "start": "node build/server.js",
+  "dev": "tsx watch src/server.ts"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
